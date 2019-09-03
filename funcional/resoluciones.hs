@@ -89,3 +89,25 @@ esPrimo n = (length (divisores n)) == 1
 primos n = [x | x <- [2..n], esPrimo x]
 
 
+--10)
+--I)
+fsum xs = foldr (+) 0 xs
+felem x xs = foldr (\y b -> x == y || b) False xs
+
+
+
+
+--17)
+--I)
+--que es foldNat??? !!!!!!!!!
+
+
+--19)
+type Conj a = (a->Bool)
+
+--I)
+vacio :: Conj a
+vacio e = False
+
+--agregar :: Eq => a -> Conj a -> Conj a
+--agregar a c = 

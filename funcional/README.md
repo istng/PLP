@@ -1,0 +1,1 @@
+Resoluciones, dudas, notas y _to dos_ de la materia **Paradigmas de Lenguajes de Programación**, 2do cuatrimestre 2019.
