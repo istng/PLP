@@ -1,0 +1,11 @@
+curry :: ((a,b)->c) -> a -> b -> c
+curry f a b = f (a,b)
+-- curry toma una f y devuelve una g que cuando es evaluada en un a y b 
+-- (o de otra forma la función que devuelve de evaluarla en a es evaluada 
+-- en b) dá como resultado f(a,b)
+
+
+uncurry :: (a->b->c) -> (a,b)->c
+uncurry f (a,b) = f a b
+-- uncurry toma f y devuelve una g que evaluada en (a,b) dá como resultado
+-- f a b

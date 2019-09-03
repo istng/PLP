@@ -1,0 +1,5 @@
+estrella:
+7,8
+
+no estrella:
+6
