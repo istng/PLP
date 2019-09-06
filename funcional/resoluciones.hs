@@ -1,3 +1,5 @@
+--Martes 03/09
+
 --1)
 --I)
 --max2 :: (Float,Float) -> Float;
@@ -102,12 +104,115 @@ felem x xs = foldr (\y b -> x == y || b) False xs
 --que es foldNat??? !!!!!!!!!
 
 
---19)
-type Conj a = (a->Bool)
+--o===========o
+--Viernes 06/09
+
+--7)
+listasQueSuman :: Int -> [[Int]]
+listasQueSuman 0 = [[]]
+listasQueSuman n = [(x:xs) | x <- [1..n], y <- [x..n], xs <- listasQueSuman(n-y), x + sum xs == n]
+
+listasQueSuman2 :: Int -> [ [Int] ]
+listasQueSuman2 0 = [[]]
+listasQueSuman2 n = [(x:xs) | x<-[1..n],xs<-listasQueSuman (n-x)]
+
+
+--8)
+listasPositivas :: [[Int]]
+listasPositivas = [xs | n <- [1..], xs <- listasQueSuman2(n)]
+
+
+
+
+--9)
+--no termino de entender la sintaxis de los esq de recr !!!!!!!!!!!!!!!!!!!!
+type DivideConquer a b = (a -> Bool)
+                        -> (a -> b)
+                        -> (a -> [a])
+                        -> ([b] -> b)
+                        -> a
+                        -> b
 
 --I)
-vacio :: Conj a
-vacio e = False
+dc :: DivideConquer a b
+dc trivial solve split combine x = if trivial x
+    then solve x
+    else combine [dc trivial solve split combine s | s <- split x ]
 
---agregar :: Eq => a -> Conj a -> Conj a
---agregar a c = 
+--II)
+--splitList :: [a] -> ([a], [a])
+--splitList myList = splitAt (((length myList) + 1) `div` 2) myList
+
+--combineList :: Ord a => [[a]] -> [a]
+--combineList xs:ys:xss -> [ x | x <- xs, y <- ys, x <= y]++[ y | y <- ys, x <- xs, y <= x]
+
+--mergeSort :: Ord a => [a] -> [a]
+--mergeSort xs = dc (((==) 1) length xs)
+--                id
+--                splitList
+
+
+
+--10)
+--I)
+--antes de (++) 03/09
+concatenacion xs ys = foldr (:) ys xs
+ffilter f xs = foldr (\x -> if f x then ([x]++) else ([]++)) [] xs
+--ffmap f xs = foldr (:).(\x -> f x) [] xs
+--la version de arriba no nada, toma el [] para el (:)??
+--pero de ser asi, cual es la funcion o el caso base para foldr??!!!!!!
+ffmap f xs = foldr ((:).(\x -> f x)) [] xs
+
+--II)
+mejorSegun :: (a -> a -> Bool) -> [a] -> a
+mejorSegun f xs = foldr1 (\x y -> if f x y then x else y) xs
+
+--III)
+sumasParciales :: Num a => [a] -> [a]
+sumasParciales xs = [sum (take n xs) | n <-[1..(length xs)]]
+
+--IV)
+sumaAlt :: Num a => [a] -> a
+sumaAlt = foldr (-) 0
+
+--V)
+sumaAltInv :: Num a => [a] -> a
+sumaAltInv xs = sumaAlt (reverse xs)
+
+--VI)
+--permutaciones :: [a] -> [[a]]
+--permutaciones
+
+--takeSome xs = [ take n xs | n <- [1..(length xs)]]
+--dropSome xs = [ drop n xs | n <- [1..(length xs)]]
+
+
+--12)
+recr::(a->[a]->b->b)->b->[a]->b
+recr _ z [] = z
+recr f z (x:xs) = f x xs (recr f z xs)
+
+--a)
+sacarUna :: Eq a => a -> [a] -> [a]
+sacarUna y ys = reverse (recr (\x xs bs -> if (x == y && not (elem y xs)) then bs else x:bs) [] (reverse ys))
+
+--b)
+--no podria distinguir si ya saque el elemento o no, no tengo acceso a a lista
+
+--c)
+insertarOrdernado :: Ord a => a -> [a] -> [a]
+insertarOrdernado y ys = recr (\x xs bs -> if (y >= x && not (elem y bs)) then x:y:bs else x:bs) [] ys
+
+--d)
+
+
+
+--14)
+--I)
+mapPares :: (a -> b -> c) -> [(a, b)] -> [c]
+mapPares f xs= map (uncurry f) xs
+
+mapPares2 :: (a -> b -> c) -> [(a, b)] -> [c]
+mapPares2 f ys= recr (\x xs bs -> (f (fst x) (snd x)):bs) [] ys
+
+--II)

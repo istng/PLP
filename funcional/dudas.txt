@@ -1,0 +1,7 @@
+
+
+9) sintaxis y resol
+10)(I) fmap
+
+1) (I) flipRaro, (II) cmax2
+2) (III) no hecho
