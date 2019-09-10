@@ -1,9 +1,9 @@
 
 preguntar:
 
-9) sintaxis y resol
-10)(I) fmap
-14)(II) zip sin rec explicita
+//9) sintaxis y resol
+//10)(I) fmap
+//14)(II) zip sin rec explicita
 16)(IV)
 19)(III)(V)
 

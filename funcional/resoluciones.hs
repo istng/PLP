@@ -131,13 +131,14 @@ dc :: DivideConquer a b
 dc trivial solve split combine x = if trivial x
     then solve x
     else combine [dc trivial solve split combine s | s <- split x ]
+-- else combine $ map (dc trivial solve split combine) (split x)
 
 --II)
 --splitList :: [a] -> ([a], [a])
 --splitList myList = splitAt (((length myList) + 1) `div` 2) myList
 
 --combineList :: Ord a => [[a]] -> [a]
---combineList xs:ys:xss -> [ x | x <- xs, y <- ys, x <= y]++[ y | y <- ys, x <- xs, y <= x]
+--combineList xs:ys:xss = [ x | x <- xs, y <- ys, x <= y]++[ y | y <- ys, x <- xs, y <= x]
 
 --mergeSort :: Ord a => [a] -> [a]
 --mergeSort xs = dc (((==) 1) length xs)
@@ -150,12 +151,12 @@ dc trivial solve split combine x = if trivial x
 --I)
 --antes de (++) 03/09
 concatenacion xs ys = foldr (:) ys xs
-ffilter f xs = foldr (\x -> if f x then ([x]++) else ([]++)) [] xs
---ffmap f xs = foldr (:).(\x -> f x) [] xs
---la version de arriba no nada, toma el [] para el (:)??
+ffilter f xs = foldr (\x bs -> (if f x then ([x]++) else ([]++) bs)) [] xs
+--ffmap f xs = foldr (:) . $ (\x -> f x) [] xs
+--la version de arriba no anda, toma el [] para el (:)??
 --pero de ser asi, cual es la funcion o el caso base para foldr??!!!!!!
 ffmap f xs = foldr ((:).(\x -> f x)) [] xs
-
+--ffmap f = foldr ((:).f) []
 --II)
 mejorSegun :: (a -> a -> Bool) -> [a] -> a
 mejorSegun f xs = foldr1 (\x y -> if f x y then x else y) xs
@@ -310,3 +311,9 @@ singleton x = agregar x vacio
 --tengo en un conjunto dado, mas que preguntar
 --uno por uno todos los que pueden existir de
 --ese tipo de a
+
+
+--21)
+data AHD tInterno tHoja = Hoja tHoja
+    | Rama tInterno (AHD tInterno tHoja)
+    | Bin (AHD tInterno tHoja) tInterno (AHD tInterno tHoja)
