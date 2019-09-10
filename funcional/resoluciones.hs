@@ -272,3 +272,41 @@ foldNat s z n = s (foldNat s z (n-1))
 --II)
 potencia :: Num a => a -> Integer -> a
 potencia x n = foldNat ((*)x) x (n-1)
+
+
+--19)
+type Conj a = (a -> Bool)
+--I)
+vacio :: Conj a
+vacio x = False
+
+agregar :: Eq a => a -> Conj a -> Conj a
+agregar x c = \y -> if y /= x then c y else True
+
+--II)
+interseccion :: Conj a -> Conj a -> Conj a
+interseccion c d = \x -> c x && d x
+
+union :: Conj a -> Conj a -> Conj a
+union c d = \x -> c x || d x
+
+--III)
+--una opcion es
+todos :: Conj a
+todos x = True
+--tiene infinitos elementos, pero de cualquier tipo
+--otra opcion seria agregar una funcion a las ya agregadas?
+--allthem :: Conj a
+--allthem x = agregar x vacio
+--algo asi
+
+--IV)
+singleton :: Eq a => a -> Conj a
+singleton x = agregar x vacio
+
+--V)
+--aparentemente no, ya que la unica manera que
+--no se me ocurre una manera de saber que elementos
+--tengo en un conjunto dado, mas que preguntar
+--uno por uno todos los que pueden existir de
+--ese tipo de a
