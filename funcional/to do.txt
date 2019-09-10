@@ -1,8 +1,5 @@
 estrella:
-10(VI),12(d),14,16
+10(VI),12(d)
 
 no estrella:
-6,11,13,15,18
-
-
-18 en adelante
+6, de 11 en adelante

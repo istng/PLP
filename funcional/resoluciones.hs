@@ -216,3 +216,27 @@ mapPares2 :: (a -> b -> c) -> [(a, b)] -> [c]
 mapPares2 f ys= recr (\x xs bs -> (f (fst x) (snd x)):bs) [] ys
 
 --II)
+
+--recr2 _ z [] [] = z
+--recr2 f z (x:xs) (y:ys) = f x y xs ys (recr f z xs ys)
+
+--armarPares xs ys = recr (\x ls bs -> (recr (\y yls ybs -> meterParSinRepetir x y ybs)) [] xs
+armarPares :: [a] -> [b] -> [(a,b)]
+armarPares [] [] = []
+armarPares (x:xs) (y:ys) = (x,y): (armarPares xs ys)
+--no se me ocurre zip...
+
+
+--III)
+mapDoble f xs ys = mapPares2 f (armarPares xs ys)
+
+
+--16)
+generate :: ([a] -> Bool) -> ([a] -> a) -> [a]
+generate stop next = generateFrom stop next []
+
+generateFrom:: ([a] -> Bool) -> ([a] -> a) -> [a] -> [a]
+generateFrom stop next xs | stop xs = init xs
+    | otherwise = generateFrom stop next (xs ++ [next xs])
+
+--I)
