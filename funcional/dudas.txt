@@ -1,8 +1,14 @@
 
+preguntar:
 
 9) sintaxis y resol
 10)(I) fmap
-14)II) zip sin rec explicita
+14)(II) zip sin rec explicita
+16)(IV)
 
 1) (I) flipRaro, (II) cmax2
 2) (III) no hecho
+
+
+repasar:
+17)(I)

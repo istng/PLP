@@ -97,13 +97,6 @@ fsum xs = foldr (+) 0 xs
 felem x xs = foldr (\y b -> x == y || b) False xs
 
 
-
-
---17)
---I)
---que es foldNat??? !!!!!!!!!
-
-
 --o===========o
 --Viernes 06/09
 
@@ -207,6 +200,9 @@ insertarOrdernado y ys = recr (\x xs bs -> if (y >= x && not (elem y bs)) then x
 
 
 
+--o==========o
+--Martes 10/09
+
 --14)
 --I)
 mapPares :: (a -> b -> c) -> [(a, b)] -> [c]
@@ -240,3 +236,39 @@ generateFrom stop next xs | stop xs = init xs
     | otherwise = generateFrom stop next (xs ++ [next xs])
 
 --I)
+aplicarAlUltimo :: (a -> a) -> a -> [a] -> a
+aplicarAlUltimo f z xs = if length xs == 0 then z else f (last xs)
+
+generateBase::([a] -> Bool) -> a -> (a -> a) -> [a]
+generateBase stop z next = generate stop (\xs -> if length xs == 0 then z else next (last xs))
+
+--II)
+factoriales :: Int -> [Int]
+factoriales n = generate (\xs -> length xs > n) (\xs -> if length xs == 0 then 1 else last xs * (length xs + 1))
+
+--III)
+iterateN :: Int -> (a -> a) -> a -> [a]
+iterateN n f x= generateBase (\xs -> length xs > n) x f
+
+iterateProof n f x = take n (iterate f x)
+
+--IV)
+aux :: ([a]->a)->[a]->[a]
+aux f xs = xs ++ (take 1 (iterate id (f xs)))
+
+--generateFrom' :: ([a] -> Bool) -> ([a] -> a) -> [a] -> [a]
+--generateFrom' stop next xs = takeWhile (\_ -> stop xs) (aux next xs)
+--stop toma xs, como puedo hacer que sea efectivo en xs y sirva como guarda del takeWhile?!!!!!!!
+
+
+
+--17)
+--I)
+--de la teorica
+foldNat :: (b -> b) -> b -> Integer -> b
+foldNat s z 0 = z
+foldNat s z n = s (foldNat s z (n-1))
+
+--II)
+potencia :: Num a => a -> Integer -> a
+potencia x n = foldNat ((*)x) x (n-1)
