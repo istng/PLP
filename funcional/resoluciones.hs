@@ -151,11 +151,11 @@ dc trivial solve split combine x = if trivial x
 --I)
 --antes de (++) 03/09
 concatenacion xs ys = foldr (:) ys xs
-ffilter f xs = foldr (\x bs -> (if f x then ([x]++) else ([]++) bs)) [] xs
+--ffilter f xs = foldr (\x bs -> (if f x then ([x]++) else ([]++) bs)) [] xs
 --ffmap f xs = foldr (:) . $ (\x -> f x) [] xs
 --la version de arriba no anda, toma el [] para el (:)??
 --pero de ser asi, cual es la funcion o el caso base para foldr??!!!!!!
-ffmap f xs = foldr ((:).(\x -> f x)) [] xs
+--ffmap f xs = foldr ((:).(\x -> f x)) [] xs
 --ffmap f = foldr ((:).f) []
 --II)
 mejorSegun :: (a -> a -> Bool) -> [a] -> a
@@ -255,8 +255,12 @@ iterateProof n f x = take n (iterate f x)
 
 --IV)
 aux :: ([a]->a)->[a]->[a]
-aux f xs = xs ++ (take 1 (iterate id (f xs)))
+aux f xs = xs ++ (take 1 (iterate id (f xs)));
 
+generateFrom' stop next xs = last $
+    takeWhile (not.stop) $
+    iterate (\l -> l++[next l]) xs
+--aux f xs = xs ++ [f xs]
 --generateFrom' :: ([a] -> Bool) -> ([a] -> a) -> [a] -> [a]
 --generateFrom' stop next xs = takeWhile (\_ -> stop xs) (aux next xs)
 --stop toma xs, como puedo hacer que sea efectivo en xs y sirva como guarda del takeWhile?!!!!!!!
@@ -292,14 +296,8 @@ union :: Conj a -> Conj a -> Conj a
 union c d = \x -> c x || d x
 
 --III)
---una opcion es
-todos :: Conj a
-todos x = True
---tiene infinitos elementos, pero de cualquier tipo
---otra opcion seria agregar una funcion a las ya agregadas?
---allthem :: Conj a
---allthem x = agregar x vacio
---algo asi
+todos :: Conj (Int -> Int)
+todos = \f -> (<) 0 (f 3)
 
 --IV)
 singleton :: Eq a => a -> Conj a
