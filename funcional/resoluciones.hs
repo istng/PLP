@@ -315,3 +315,49 @@ singleton x = agregar x vacio
 data AHD tInterno tHoja = Hoja tHoja
     | Rama tInterno (AHD tInterno tHoja)
     | Bin (AHD tInterno tHoja) tInterno (AHD tInterno tHoja)
+
+--I)
+--foldAHD :: (tInterno -> tInterno) -> (tHoja -> tHoja) -> (AHD tInterno tHoja) -> (AHD tInterno tHoja)
+--el AHD original podria ser de tipos distintos al devuelto por el fold, creo?
+--foldAHD :: (ti -> tInterno) -> (th -> tHoja) -> Bin (AHD ti th) ti (AHD ti th) ->  -> (AHD ti th) -> (AHD tInterno tHoja)
+--no necesariamente devuelve el mismo tipo con el que entro un fold, en este caso
+--un AHD...
+foldAHD :: (th -> t) -> (ti -> t -> t) -> (t -> ti -> t -> t) -> (AHD ti th) -> t
+foldAHD fHoja fRama fBin ahd = case ahd of
+    Hoja h -> fHoja h
+    Rama r a -> fRama r (rec a)
+    Bin i m d -> fBin (rec i) m (rec d)
+    where rec = foldAHD fHoja fRama fBin
+
+--shownacho ahd = foldAHD (\h -> ["Hoja ",h])
+--                   (\r a -> ["Rama ",r,a])
+--                   (\i m d -> ["Bin ",i,m,d])
+
+{-instance Show (AHD tInterno tHoja) where
+    show = foldAHD (\h -> "Hoja " ++ (show h))
+                   (\r a -> "Rama " ++ (show r) ++ a)
+                   (\i m d -> "Bin " ++ i ++ (show m) ++ d)
+-}
+{-
+--II)
+mapAHD :: (a -> b) -> (c -> d) -> AHD a c -> AHD b d
+mapAHD fnodos fhojas = foldAHD fnodos fhojas-}
+
+
+--23)
+--I)
+data RoseTree t = RHoja t | RNodo t [RoseTree t] deriving Show
+
+--II)
+recRoseTree :: (Int -> b) -> (Int -> [b] -> Int -> [RoseTree Int] -> b) -> (RoseTree Int) -> b
+recRoseTree fhoja fnodo rosetree = case rosetree of
+    RHoja h -> fhoja h
+    RNodo n rs -> fnodo n (map rec rs) n rs
+    where rec = recRoseTree fhoja fnodo
+
+--III)
+--a)
+flatten xss = foldr (++) [] xss
+
+hojas = recRoseTree (\h -> [h])
+                    (\n ns m rs -> flatten ns)

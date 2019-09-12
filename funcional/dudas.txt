@@ -1,14 +1,15 @@
 
 preguntar:
+21) como hago un show, lo necesitaria para comprobar el fold y map
+(se puede quiza con deriving... pero ver por rosetree (23))
 
+
+revisar:
 //9) sintaxis y resol REV
 //10)(I) fmap REV
 //14)(II) zip sin rec explicita REV
 //16)(IV) REV
-//19)(III)(V)
-
 //1) (I) flipRaro, REV (II) cmax2
-//2) (III) no hecho
 
 
 repasar:
