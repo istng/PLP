@@ -45,9 +45,13 @@ flipAll = map flip
 --y son a,b,c porque no tengo ninguna restriccion sobre sus tipos
 
 
---flipRaro :: (a -> b -> c) -> a -> b -> c
+flipRaro :: b -> (a -> b -> c) -> a -> c
 flipRaro = flip flip
---no entiendo!!!!!!!!!!!!!!!!!!!
+--serviria por ejemplo para fijar el "seungdo parametro" de una
+--funcion... en terminos mas currificados, dado un b flipRaro
+--me devuelve una funcion que toma una funcion de a->(b->c),
+--y si le paso una asi, me devuelve una funcion que va de a->c,
+--es decir, es la funcion dada de instanciar el parametro b
 
 
 --II)
@@ -55,8 +59,6 @@ flipRaro = flip flip
 cmax2 x = \y -> case () of 
     _ | x >= y -> x
       | otherwise -> y
---esta era la idea? !!!!!!!!!!!
-
 
 
 --2)
@@ -118,7 +120,6 @@ listasPositivas = [xs | n <- [1..], xs <- listasQueSuman2(n)]
 
 
 --9)
---no termino de entender la sintaxis de los esq de recr !!!!!!!!!!!!!!!!!!!!
 type DivideConquer a b = (a -> Bool)
                         -> (a -> b)
                         -> (a -> [a])
@@ -138,25 +139,29 @@ dc trivial solve split combine x = if trivial x
 --splitList myList = splitAt (((length myList) + 1) `div` 2) myList
 
 --combineList :: Ord a => [[a]] -> [a]
---combineList xs:ys:xss = [ x | x <- xs, y <- ys, x <= y]++[ y | y <- ys, x <- xs, y <= x]
+--combineList xs ys = [ x | x <- xs, y <- ys, x <= y]++[ y | y <- ys, x <- xs, y <= x]
 
 --mergeSort :: Ord a => [a] -> [a]
 --mergeSort xs = dc (((==) 1) length xs)
 --                id
 --                splitList
 
+--III)
+enlistar xs = foldr (\x -> (:)[x]) [] xs
 
+--mapdc :: (a -> b) -> [a] -> [b]
+--mapdc f xs = dc (\ss -> ((==) 1) (length ss)) (\xs -> (\x -> x:[]).f (head xs)) enlistar flatten xs
 
 --10)
 --I)
 --antes de (++) 03/09
 concatenacion xs ys = foldr (:) ys xs
---ffilter f xs = foldr (\x bs -> (if f x then ([x]++) else ([]++) bs)) [] xs
+ffilter f xs = foldr (\x -> (if f x then ([x]++) else ([]++))) [] xs
+--tambien se podia claramente ((++)[x])
 --ffmap f xs = foldr (:) . $ (\x -> f x) [] xs
---la version de arriba no anda, toma el [] para el (:)??
---pero de ser asi, cual es la funcion o el caso base para foldr??!!!!!!
 --ffmap f xs = foldr ((:).(\x -> f x)) [] xs
---ffmap f = foldr ((:).f) []
+ffmap f = foldr ((:).f) []
+
 --II)
 mejorSegun :: (a -> a -> Bool) -> [a] -> a
 mejorSegun f xs = foldr1 (\x y -> if f x y then x else y) xs
@@ -223,6 +228,17 @@ armarPares [] [] = []
 armarPares (x:xs) (y:ys) = (x,y): (armarPares xs ys)
 --no se me ocurre zip...
 
+{-armarPares2 = foldr (\x rec ->
+    \ys -> case of
+        [] -> []
+        (z:zs) -> (x,z):rec zs)
+    []-}
+armarPares2 :: [a] -> [a] -> [(a,a)]
+armarPares2 = foldr
+               (\a armarAs bs -> if null bs 
+                                 then [] 
+                                 else (a,head bs):armarAs (tail bs) )
+               (const [])
 
 --III)
 mapDoble f xs ys = mapPares2 f (armarPares xs ys)
@@ -263,8 +279,6 @@ generateFrom' stop next xs = last $
 --aux f xs = xs ++ [f xs]
 --generateFrom' :: ([a] -> Bool) -> ([a] -> a) -> [a] -> [a]
 --generateFrom' stop next xs = takeWhile (\_ -> stop xs) (aux next xs)
---stop toma xs, como puedo hacer que sea efectivo en xs y sirva como guarda del takeWhile?!!!!!!!
-
 
 
 --17)
@@ -349,15 +363,27 @@ mapAHD fnodos fhojas = foldAHD fnodos fhojas-}
 data RoseTree t = RHoja t | RNodo t [RoseTree t] deriving Show
 
 --II)
-recRoseTree :: (Int -> b) -> (Int -> [b] -> Int -> [RoseTree Int] -> b) -> (RoseTree Int) -> b
+recRoseTree :: (t -> b) -> (t -> [b] -> t -> [RoseTree t] -> b) -> (RoseTree t) -> b
 recRoseTree fhoja fnodo rosetree = case rosetree of
     RHoja h -> fhoja h
     RNodo n rs -> fnodo n (map rec rs) n rs
     where rec = recRoseTree fhoja fnodo
 
 --III)
---a)
 flatten xss = foldr (++) [] xss
 
+--a)
+hojas :: (RoseTree t) -> [t]
 hojas = recRoseTree (\h -> [h])
                     (\n ns m rs -> flatten ns)
+--RNodo 1 [(RNodo 2 [(RNodo 3 [(RHoja 4), (RNodo 5 [(RHoja 6), (RHoja 7)])]), (RHoja 8)])]
+
+--b)
+distancias :: (RoseTree t) -> [Int]
+distancias = recRoseTree (\h -> [1])
+                         (\n ns m rs -> (map ((+)1) (flatten ns)))
+
+--c)
+altura :: (RoseTree t) -> Int
+altura = (mejorSegun (>)).distancias
+--altura = maximum.distancias

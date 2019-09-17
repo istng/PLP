@@ -2,15 +2,10 @@
 preguntar:
 21) como hago un show, lo necesitaria para comprobar el fold y map
 (se puede quiza con deriving... pero ver por rosetree (23))
-
+9)(II) no se me ocurre combine... ayuda con (III)
+14)(II) no entiendo el armarAs, no termino de ver donde encaja la pista del enunciado
 
 revisar:
-//9) sintaxis y resol REV
-//10)(I) fmap REV
-//14)(II) zip sin rec explicita REV
-//16)(IV) REV
-//1) (I) flipRaro, REV (II) cmax2
 
 
 repasar:
-17)(I)
