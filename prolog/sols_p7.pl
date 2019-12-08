@@ -328,3 +328,32 @@ corteParejo(L,C):-
   C is S/2.
 
 corteMasParejo(L,L1,L2):- concatenar(L1,L2,L), corteParejo(L,C), diff(C,L1,L2).
+
+
+%23)
+
+%esNodo(+G,?X)
+%esArista(+G,?X,?Y)
+
+%I)
+
+esArista(g,1,2).
+esArista(g,2,3).
+esArista(g,3,4).
+esArista(g,1,5).
+esArista(g,2,1).
+esArista(g,3,2).
+esArista(g,4,3).
+esArista(g,5,1).
+
+caminataPorGrafo(_,_,[],_).
+
+caminataPorGrafo(G,D,LS,U):-
+  esArista(G,D,X),
+  member(U,X),
+  caminataPorGrafo(G,D,LS,U).
+
+caminataPorGrafo(G,D,[D|LS],U):-
+  esArista(G,D,X),
+  not(member(U,X)),
+  caminataPorGrafo(G,X,LS,[X|U]).
