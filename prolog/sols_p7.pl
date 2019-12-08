@@ -143,6 +143,8 @@ desde(X,Y) :- N is X+1, desde(N,Y).
 %I) Con Y mayor a X, si no, nunca va a unificar y va a continuar llamandose con el +1.
 
 %II)
+desde3(X, Y) :-nonvar(Y),Y >= X.
+desde3(X,Y) :-var(Y),desde(X,Y).
 
 
 %12)
@@ -205,10 +207,124 @@ aBB(bin(Izq,V,Der)):- maxValue(Izq,I), minValue(Der,D), V >= I, D >= V,
   aBB(Izq), aBB(Der).
 
 
-%IV)
+%IV) quizá le faltaría chequear que sea aBB, pero es agregar una condición...
 aBBInsertar(X,bin(nil,V,nil),bin(bin(nil,X,nil),V,nil)):- V >= X.
 aBBInsertar(X,bin(nil,V,nil),bin(nil,V,bin(nil,X,nil))):- X > V.
 aBBInsertar(X,bin(Izq,V,nil),bin(T2,V,nil)):- V >= X, aBBInsertar(X,Izq,T2).
 aBBInsertar(X,bin(nil,V,Der),bin(nil,V,T2)):- X >= V, aBBInsertar(X,Der,T2).
 aBBInsertar(X,bin(Izq,V,Der),bin(T2,V,Der)):- V >= X, aBBInsertar(X,Izq,T2).
 aBBInsertar(X,bin(Izq,V,Der),bin(Izq,V,T2)):- X >= V, aBBInsertar(X,Der,T2).
+
+
+%14)
+gcd(X, Y, Z) :-
+    X < 0, !,
+    gcd(-X, Y, Z).
+gcd(X, Y, Z) :-
+    Y < 0, !,
+    gcd(X, -Y, Z).
+gcd(X, 0, X) :- X > 0.
+gcd(0, Y, Y) :- Y > 0.
+gcd(X, Y, Z) :-
+    X > Y, Y > 0,
+    X1 is X - Y,
+    gcd(Y, X1, Z).
+gcd(X, Y, Z) :-
+    X =< Y, X > 0,
+    Y1 is Y - X,
+    gcd(X, Y1, Z).
+
+sonCoprimos(X,Y):- gcd(X,Y,R), R =:= 1.
+
+generarPares(X,Y):- desde3(1,X), desde3(X,Y).
+
+coprimos(X,Y):- generarPares(X,Y), sonCoprimos(X,Y).
+
+
+%15)
+%I)
+sumaLista([],0).
+sumaLista([X|XS],R):- sumaLista(XS,S), R = X+S.
+dimension([],_).
+dimension([X|XS],D):- length(X,D), dimension(XS,D).
+cuadradoSemiLatinoAux2([],_).
+cuadradoSemiLatinoAux2([X|XS],S):- sumaLista(X,S), cuadradoSemiLatinoAux2(XS,S).
+cuadradoSemiLatino2(N, [X|XS]):- dimension([X|XS],N), sumaLista(X,S), cuadradoSemiLatinoAux2(XS,S).
+
+
+entre(X,Y,X):- Y >= X.
+entre(X,Y,Z):- Y > X, N is X+1, entre(N,Y,Z).
+
+listasQueSuman([],_,0).
+listasQueSuman([X|XS],D,S):-
+  Dn is D-1,
+  length(XS,Dn),
+  entre(0,S,R),
+  X is R,
+  Sn is S-X,
+  listasQueSuman(XS,Dn,Sn).
+
+cuadradoSemiLatinoAux(_,0,[],_).
+
+cuadradoSemiLatinoAux(N,D,[X|XS],S):-
+  Dn is D-1,
+  length(XS,Dn),
+  listasQueSuman(X,N,S),
+  cuadradoSemiLatinoAux(N,Dn,XS,S).
+
+cuadradoSemiLatino(N,[X|XS]):- desde(0,S), cuadradoSemiLatinoAux(N,N,[X|XS],S).
+
+
+%II)
+primerosElems([],[]).
+primerosElems([[L|LS]|XS],[L|YS]):- primerosElems(XS,YS).
+
+colas([],[]).
+colas([[L|LS]|XS],[LS|YS]):- colas(XS,YS).
+
+sonVacias([]).
+sonVacias([X|XS]):- length(X,0), sonVacias(XS).
+
+traspuesta([],[]).
+traspuesta(XS,[]):- sonVacias(XS).
+traspuesta(XS,[T|TS]):- primerosElems(XS,T), colas(XS,CS), traspuesta(CS,TS).
+
+cuadradoMagico(N,XS):- cuadradoSemiLatino(N,XS), traspuesta(XS,TS), cuadradoSemiLatino(N,TS).
+
+
+%17)
+frutal(manzana).
+frutal(frutilla).
+frutal(banana).
+cremoso(americana).
+cremoso(banana).
+cremoso(frutilla).
+cremoso(dulceDeLeche).
+
+leGusta(X) :- frutal(X), cremoso(X).
+cucurucho(X,Y) :- leGusta(X), leGusta(Y), !.
+
+
+%18)
+%I) Dado que los dos son verdad para cualquier variable instanciada o no instanciada,
+%ocurre que negar una siempre dá false.
+p(X).
+q(X).
+
+%II) Lo mismo...
+
+%III)
+
+
+
+%19)
+diff(S,L1,L2):-
+  sumaLista(L1,S1),
+  sumaLista(L2,S2),
+  S is abs(S1-S2).
+
+corteParejo(L,C):-
+  sumaLista(L,S),
+  C is S/2.
+
+corteMasParejo(L,L1,L2):- concatenar(L1,L2,L), corteParejo(L,C), diff(C,L1,L2).
