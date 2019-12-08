@@ -176,8 +176,39 @@ arbolConInorder(L,AB):-inorder(AB,L).
 %III)
 abb(bin(bin(bin(nil,1,nil),5,bin(bin(nil,6,nil),7,nil)),10,bin(nil,11,bin(nil,13,nil)))).
 
+
+maxValue(bin(nil,V,nil),V).
+maxValue(bin(Izq,V,nil),V):- maxValue(Izq, I), V >= I.
+maxValue(bin(Izq,V,nil),I):- maxValue(Izq, I), I > V.
+maxValue(bin(nil,V,Der),V):- maxValue(Der, D), V >= D.
+maxValue(bin(nil,V,Der),D):- maxValue(Der, D), D > V.
+maxValue(bin(Izq,V,Der),V):- maxValue(Izq, I), maxValue(Der, D), V >= I, V >= D.
+maxValue(bin(Izq,V,Der),I):- maxValue(Izq, I), maxValue(Der, D), I >= V, I >= D.
+maxValue(bin(Izq,V,Der),D):- maxValue(Izq, I), maxValue(Der, D), D >= V, D >= I.
+
+
+minValue(bin(nil,V,nil),V).
+minValue(bin(Izq,V,nil),V):- minValue(Izq, I), I >= V.
+minValue(bin(Izq,V,nil),I):- minValue(Izq, I), V > I.
+minValue(bin(nil,V,Der),V):- minValue(Der, D), D >= V.
+minValue(bin(nil,V,Der),D):- minValue(Der, D), V > D.
+minValue(bin(Izq,V,Der),V):- minValue(Izq, I), minValue(Der, D), I >= V, D >= V.
+minValue(bin(Izq,V,Der),I):- minValue(Izq, I), minValue(Der, D), V >= I, D >= I.
+minValue(bin(Izq,V,Der),D):- minValue(Izq, I), minValue(Der, D), V >= D, I >= D.
+
+
 aBB(nil).
 aBB(bin(nil,_,nil)).
-aBB(bin(bin(Izq,I,Der),V,nil)):- V >= I, aBB(bin(Izq,I,Der)).
-aBB(bin(nil,V,bin(Izq,D,Der))):- D >= V, aBB(bin(Izq,D,Der)).
-aBB(bin(bin(IIzq,I,IDer),V,bin(DIzq,D,DDer))):- V >= I, D >= V, aBB(bin(IIzq,I,IDer)), aBB(bin(DIzq,D,DDer)).
+aBB(bin(Izq,V,nil)):- maxValue(Izq,I), V >= I, aBB(Izq).
+aBB(bin(nil,V,Der)):- minValue(Der,D), D >= V, aBB(Der).
+aBB(bin(Izq,V,Der)):- maxValue(Izq,I), minValue(Der,D), V >= I, D >= V, 
+  aBB(Izq), aBB(Der).
+
+
+%IV)
+aBBInsertar(X,bin(nil,V,nil),bin(bin(nil,X,nil),V,nil)):- V >= X.
+aBBInsertar(X,bin(nil,V,nil),bin(nil,V,bin(nil,X,nil))):- X > V.
+aBBInsertar(X,bin(Izq,V,nil),bin(T2,V,nil)):- V >= X, aBBInsertar(X,Izq,T2).
+aBBInsertar(X,bin(nil,V,Der),bin(nil,V,T2)):- X >= V, aBBInsertar(X,Der,T2).
+aBBInsertar(X,bin(Izq,V,Der),bin(T2,V,Der)):- V >= X, aBBInsertar(X,Izq,T2).
+aBBInsertar(X,bin(Izq,V,Der),bin(Izq,V,T2)):- X >= V, aBBInsertar(X,Der,T2).
