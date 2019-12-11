@@ -6,3 +6,7 @@ c) por qué no funciona mi eval? no entiendo por qué dá [Function]
 4)d) (lo comentado) no tiene efecto porque modifica a Punto, y el .new de Punto no toma las funciones que tenga y se las pasa al p que devuelve, si no que arma todo dentro de sí... está bien entonces esto?
 
 5) Diferencia entre tener las funciones dentro del scope del constructor y por fuera, con prototype (ejemplo: moverX vs mostrar)
+
+7)a) La declaración que hice de h me confunde. Osea que cuando se hace un new se "congela" cómo esté definido en ese momento el objeto y su prototipo en la nueva variable?
+
+9) Duda con el segundo programa...

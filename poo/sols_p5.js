@@ -187,10 +187,10 @@ Punto5.prototype.mostrar = function(){
   return "Punto("+this.x+","+this.y+")";
 }
 
-let p = new Punto5(1,2);
-let p2 = new Punto5(13,2);
-console.log(p.mostrar());
-console.log(p2.mostrar());
+//let p = new Punto5(1,2);
+//let p2 = new Punto5(13,2);
+//console.log(p.mostrar());
+//console.log(p2.mostrar());
 
 function PuntoColoreado5(a,b,c){
   this.x = a;
@@ -200,5 +200,57 @@ function PuntoColoreado5(a,b,c){
 
 PuntoColoreado5.prototype.__proto__ = Punto5.prototype;
 
-let pc = new PuntoColoreado5(1,2,"rojo");
-console.log(pc.mostrar());
+//let pc = new PuntoColoreado5(1,2,"rojo");
+//console.log(pc.mostrar());
+
+
+//7)
+function C1 () {};
+C1 . prototype . g = " Hola " ;
+function C2 () {};
+C2 . prototype . g = " Mundo " ;
+//a) Los dos mostraran "Mundo" porque se modificó el prototipo de C1, y
+//tanto a como b iran a buscar la función g en sus prototipos ya que
+//C1 como objeto no la tiene definida (mal, en (b) lo repienso).
+let a = new C1 () ;
+C1 . prototype = C2 . prototype
+let b = new C1 () ;
+
+C2.prototype.h = "c2";
+C1.prototype.h = "c1";
+
+//console . log ( a . g ) ;
+//console . log ( b . g ) ;
+//console . log ( a . h ) ;
+//console . log ( b . h ) ;
+
+//b)
+let c = new C1 () ;
+C1 . prototype.g = C2 . prototype.g
+let d = new C1 () ;
+//console . log ( c . g ) ;
+//console . log ( d . g ) ;
+
+//Claro no. Cuando reemplazamos el prototype en (a), a seguía teniendo dónde
+//buscar dentro de C1 la función g, ya que estaba definida, pero cunado
+//cambiamos en el prototipo a la función g en C1, ahí pasó a usar la misma
+//que C2...
+
+
+//8)
+let o1 = { x : 1};
+let o2 = Object . create ( o1 ) ;
+o2 . __proto__ . y = 2;
+console . log ( o1 . y ) ;
+//acá le encuentro sentido que muestre 2 porque se modifica el
+//prototipo de o2, es decir, o1...
+console . log ( o1 . x ) ;
+o2 . __proto__ . x = 5;
+console . log ( o1 . x ) ;
+
+
+let q1 = { x : 1};
+let q2 = { y : 2};
+q1 . __proto__ . z = 3;
+console . log ( q2 . z ) ; 
+//devuelve 3... por qué lo busca como si estuviese relacionado con q1??
