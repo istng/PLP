@@ -1,0 +1,8 @@
+3)a) podría hacer Sucesor como "let succ = {...}"?
+b) no puedo agregarle atributos a un objeto declarado como Sucesor en (a)?
+parece que puedo si uso Sucesor.prototype.funcion = function()...
+c) por qué no funciona mi eval? no entiendo por qué dá [Function]
+
+4)d) (lo comentado) no tiene efecto porque modifica a Punto, y el .new de Punto no toma las funciones que tenga y se las pasa al p que devuelve, si no que arma todo dentro de sí... está bien entonces esto?
+
+5) Diferencia entre tener las funciones dentro del scope del constructor y por fuera, con prototype (ejemplo: moverX vs mostrar)
