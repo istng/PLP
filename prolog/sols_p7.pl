@@ -65,11 +65,13 @@ last([X|XS], U):- last(XS,U).
 
 %II)
 reverse([],[]).
-reverse([X|XS],L):- reverse(XS, R), concatenar(R, [X], L).
+reverse([X|XS],L):- reverse(XS, R), append(R, [X], L).
 
 %III)
 prefijo([],_).
-prefijo([X|XS],[Y|YS]):- X =:= Y, prefijo(XS,YS).
+prefijo([X|XS],[X|YS]):- prefijo(XS,YS).
+
+prefijo2(XS,YS):- concatenar(XS,L,YS).
 
 %IV)
 sufijo(XS,YS):- reverse(XS,XR), reverse(YS,YR), prefijo(XR,YR).
@@ -86,6 +88,12 @@ pertenece(X,[_|L]):- pertenece(X,L).
 
 
 %6)
+esLista([X|XS]).
+esLista([]).
+
+aplanar([],[]).
+aplanar([X|XS], LS):- aplanar(X,PX), aplanar(XS,PXS), append(PX,PXS,LS).
+aplanar(X,[X]):- not(esLista(X)).
 
 
 %8)
@@ -169,7 +177,7 @@ cantidadDeNodos(bin(Izq,_,Der),N):- cantidadDeNodos(Izq,I), cantidadDeNodos(Der,
 %13)
 %I)
 inorder(nil,[]).
-inorder(bin(nil,V,nil), [V]).
+%inorder(bin(nil,V,nil), [V]).
 inorder(bin(Izq,V,Der),L):- inorder(Izq, LI), inorder(Der, LD), concatenar(LI,[V],Z), concatenar(Z,LD,L).
 
 %II)
@@ -217,26 +225,9 @@ aBBInsertar(X,bin(Izq,V,Der),bin(Izq,V,T2)):- X >= V, aBBInsertar(X,Der,T2).
 
 
 %14)
-gcd(X, Y, Z) :-
-    X < 0, !,
-    gcd(-X, Y, Z).
-gcd(X, Y, Z) :-
-    Y < 0, !,
-    gcd(X, -Y, Z).
-gcd(X, 0, X) :- X > 0.
-gcd(0, Y, Y) :- Y > 0.
-gcd(X, Y, Z) :-
-    X > Y, Y > 0,
-    X1 is X - Y,
-    gcd(Y, X1, Z).
-gcd(X, Y, Z) :-
-    X =< Y, X > 0,
-    Y1 is Y - X,
-    gcd(X, Y1, Z).
-
 sonCoprimos(X,Y):- gcd(X,Y,R), R =:= 1.
 
-generarPares(X,Y):- desde3(1,X), desde3(X,Y).
+generarPares(Y,Z):- desde3(0,X).
 
 coprimos(X,Y):- generarPares(X,Y), sonCoprimos(X,Y).
 

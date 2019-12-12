@@ -1,11 +1,5 @@
 1)VIII) Justificación se resuelto
-5)IV) V) Si meto L sin instanciar tira error...
 
-6) Aplanar (veeeer)
-
-8) En general cosas de instaciación (relacionado con 5).
-
-13)IV) Reversibilidad (ver, relacionado con 8).
 
 14) Genero los pares cesgado, osea, nunca sale del (1,X)...
 
