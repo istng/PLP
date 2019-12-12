@@ -37,9 +37,6 @@ function Sucesor(predecesor) {
   this.esCero = function(){
     return false;
   };
-  this.succ = function(){
-    return new Sucesor(this);
-  }
 }
 
 cero.succ = function(){
@@ -212,17 +209,19 @@ C2 . prototype . g = " Mundo " ;
 //a) Los dos mostraran "Mundo" porque se modificó el prototipo de C1, y
 //tanto a como b iran a buscar la función g en sus prototipos ya que
 //C1 como objeto no la tiene definida (mal, en (b) lo repienso).
+
 let a = new C1 () ;
 C1 . prototype = C2 . prototype
 let b = new C1 () ;
 
 C2.prototype.h = "c2";
-C1.prototype.h = "c1";
+//C1.prototype.h = "c1";
 
-//console . log ( a . g ) ;
-//console . log ( b . g ) ;
-//console . log ( a . h ) ;
-//console . log ( b . h ) ;
+console . log ( a . g ) ;
+console . log ( b . g ) ;
+console . log ( a . h ) ;
+console . log ( b . h ) ;
+console.log(C1.prototype);
 
 //b)
 let c = new C1 () ;
