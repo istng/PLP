@@ -225,9 +225,10 @@ aBBInsertar(X,bin(Izq,V,Der),bin(Izq,V,T2)):- X >= V, aBBInsertar(X,Der,T2).
 
 
 %14)
-sonCoprimos(X,Y):- gcd(X,Y,R), R =:= 1.
+sonCoprimos(X,Y):- Z is gcd(X,Y), Z =:= 1.
 
-generarPares(Y,Z):- desde3(0,X).
+suma(X,Y,Z):- Y is Z-X.
+generarPares(X,Y):- desde3(0,Z), between(0,Z,X), suma(X,Y,Z).
 
 coprimos(X,Y):- generarPares(X,Y), sonCoprimos(X,Y).
 
